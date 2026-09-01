@@ -10,7 +10,10 @@ app.use(express.json({ limit: '10mb' }));
 app.use(cors());
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-app.get('/',(req,res)=\>{res.send('Server is running');});\'
+app.get('/', (req, res) => {
+    res.send('Server is running');
+});
+
 app.post('/api/chat', async (req, res) => {
   try {
     const { prompt, base64Media, mimeType } = req.body;
@@ -23,24 +26,26 @@ app.post('/api/chat', async (req, res) => {
     }
     contents.push(prompt);
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: contents,
-      config: {
-        systemInstruction: "Hello! I am Elef. Always Ready to help you."
-      }
-    });
+    try {
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.5-flash',
+    contents: contents,
+    config: {
+      systemInstruction: "Hello! I am Elef. Always Ready to help you."
+    }
+  });
 
-    res.json({ text: response.text });
-  } catch (error) {
-    console.error("Sorry we coudn't fetch data try again:", error);
-    res.status(500).json({ error: "Uh oh! Check you internet connection or try again." });
-  }
-});
+  res.json({ text: response.text });
+} catch (error) {
+  console.error("Sorry we couldn't fetch data try again:", error);
+  res.status(500).json({ error: "Uh oh! Check your internet connection or try again." });
+}
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Elef backend server running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
+
+
 
 
