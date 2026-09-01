@@ -10,7 +10,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(cors());
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
+app.get('/'(req,res) =>{res.send('Server is running');});\
 app.post('/api/chat', async (req, res) => {
   try {
     const { prompt, base64Media, mimeType } = req.body;
